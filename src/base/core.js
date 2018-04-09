@@ -1,5 +1,8 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const Path = require('path');
+const localPath = Path.join(__dirname, '../');
+const clientPath = Path.join(process.mainModule.filename, '../');
 require('../extentions/Message.js')(Discord.Structures);
 require('../extentions/GuildMember.js')(Discord.Structures);
 require('../extentions/User.js')(Discord.Structures);
@@ -10,16 +13,15 @@ class PlexiFramework extends Discord.Client {
 		this.log = require('../functions/Log');
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
-		this.path = process.mainModule.filename.split('\\').slice(0, -1).join('\\');
 		this.loadCommands();
 		this.loadEvents();
 		this.loadConfiguration();
-		this.config = require(`${this.path}/config.json`);
+		this.config = require(`${clientPath}/config.json`);
 		require('../functions/function.js')(this);
 	}
 
 	loadCommands() {
-		var commands = `${this.path}/commands/`;
+		var commands = `${clientPath}/commands/`;
 		if (!fs.existsSync(commands)) {
 			fs.mkdirSync(commands);
 			this.log.default('Created Commands Folder.');
@@ -44,7 +46,7 @@ class PlexiFramework extends Discord.Client {
 	}
 
 	loadEvents() {
-		var events = `${this.path}/events/`;
+		var events = `${clientPath}/events/`;
 		if (!fs.existsSync(events)) {
 			fs.mkdirSync(events);
 			this.log.default('Created Events Folder.');
@@ -67,18 +69,18 @@ class PlexiFramework extends Discord.Client {
 	}
 
 	loadExamples() {
-		if (!fs.existsSync(`${this.path}/events/message.js`)) {
-			fs.writeFileSync(`${this.path}/events/message.js`, fs.readFileSync(`${__dirname.split('\\').slice(0, -1).join('\\')}/template/message.js`));
+		if (!fs.existsSync(`${clientPath}/events/message.js`)) {
+			fs.writeFileSync(`${clientPath}/events/message.js`, fs.readFileSync(`${localPath}/template/message.js`));
 			this.log.default('Created message.js Event File.');
 		}
 
-		if (!fs.existsSync(`${this.path}/commands/eval.js`)) {
-			fs.writeFileSync(`${this.path}/commands/eval.js`, fs.readFileSync(`${__dirname.split('\\').slice(0, -1).join('\\')}/template/eval.js`));
+		if (!fs.existsSync(`${clientPath}/commands/eval.js`)) {
+			fs.writeFileSync(`${clientPath}/commands/eval.js`, fs.readFileSync(`${localPath}/template/eval.js`));
 			this.log.default('Created eval.js Command File.');
 		}
 
-		if (!fs.existsSync(`${this.path}/commands/example.js`)) {
-			fs.writeFileSync(`${this.path}/commands/example.js`, fs.readFileSync(`${__dirname.split('\\').slice(0, -1).join('\\')}/template/example.js`));
+		if (!fs.existsSync(`${clientPath}/commands/example.js`)) {
+			fs.writeFileSync(`${clientPath}/commands/example.js`, fs.readFileSync(`${localPath}/template/example.js`));
 			this.log.default('Created example.js Command File.');
 		}
 	}
@@ -89,8 +91,8 @@ class PlexiFramework extends Discord.Client {
 			prefix: 'Your prefix',
 			ownerID: 'Your Client ID'
 		};
-		if (!fs.existsSync(`${this.path}/config.json`)) {
-			fs.writeFileSync(`${this.path}/config.json`, JSON.stringify(defaultConfig, null, 4));
+		if (!fs.existsSync(`${clientPath}/config.json`)) {
+			fs.writeFileSync(`${clientPath}/config.json`, JSON.stringify(defaultConfig, null, 4));
 			this.log.ready('====================================================');
 			this.log.ready('Automaticly generated a New Config File,');
 			this.log.ready('Please insert your Client ID, Token and Prefix.');
