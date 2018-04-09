@@ -8,7 +8,6 @@ module.exports = Structures => {
 					.then(msg => {
 						if (!isNaN(options.deleteAfter)) msg.delete({ timeout: options.deleteAfter });
 					});
-				return this;
 			}
 
 			quickHook(msg, options = {}) {

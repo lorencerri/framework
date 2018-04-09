@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 require('../extentions/Message.js')(Discord.Structures);
 require('../extentions/GuildMember.js')(Discord.Structures);
+require('../extentions/User.js')(Discord.Structures);
 class PlexiFramework extends Discord.Client {
 	constructor(options) {
 		super(options);
@@ -32,6 +33,7 @@ class PlexiFramework extends Discord.Client {
 			}
 			jsfiles.forEach(cmds => {
 				let props = require(`${commands}/${cmds}`);
+				props.conf.cooldownQueue = new Map();
 				this.commands.set(props.help.name, props);
 				props.conf.aliases.forEach(alias => {
 					this.aliases.set(alias, props.help.name);
@@ -64,6 +66,23 @@ class PlexiFramework extends Discord.Client {
 		});
 	}
 
+	loadExamples() {
+		if (!fs.existsSync(`${this.path}/events/message.js`)) {
+			fs.writeFileSync(`${this.path}/events/message.js`, fs.readFileSync(`${__dirname.split('\\').slice(0, -1).join('\\')}/template/message.js`));
+			this.log.default('Created message.js Event File.');
+		}
+
+		if (!fs.existsSync(`${this.path}/commands/eval.js`)) {
+			fs.writeFileSync(`${this.path}/commands/eval.js`, fs.readFileSync(`${__dirname.split('\\').slice(0, -1).join('\\')}/template/eval.js`));
+			this.log.default('Created eval.js Command File.');
+		}
+
+		if (!fs.existsSync(`${this.path}/commands/example.js`)) {
+			fs.writeFileSync(`${this.path}/commands/example.js`, fs.readFileSync(`${__dirname.split('\\').slice(0, -1).join('\\')}/template/example.js`));
+			this.log.default('Created example.js Command File.');
+		}
+	}
+
 	loadConfiguration() {
 		let defaultConfig = {
 			token: 'Token Here',
@@ -72,11 +91,14 @@ class PlexiFramework extends Discord.Client {
 		};
 		if (!fs.existsSync(`${this.path}/config.json`)) {
 			fs.writeFileSync(`${this.path}/config.json`, JSON.stringify(defaultConfig, null, 4));
+			this.log.ready('====================================================');
 			this.log.ready('Automaticly generated a New Config File,');
 			this.log.ready('Please insert your Client ID, Token and Prefix.');
 			this.log.ready('Once completed restart the Bot.');
-			this.log.ready('Thank you using the Plexi Development Framework.');
+			this.log.ready('Thank you for using the Plexi Development Framework.');
 			this.log.ready('Offical Server : https://discord.io/plexidev');
+			this.log.ready('====================================================');
+			this.loadExamples();
 			process.exit(1);
 		}
 	}

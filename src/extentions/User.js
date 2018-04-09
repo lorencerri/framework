@@ -1,9 +1,8 @@
 module.exports = Structures => {
-	Structures.extend('GuildMember', DiscordGuildMember =>
-		class GuildMember extends DiscordGuildMember { // eslint-disable-line no-unused-vars
+	Structures.extend('User', DiscordUser =>
+		class User extends DiscordUser { // eslint-disable-line no-unused-vars
 			constructor(...args) {
 				super(...args);
-				this.uniquie = `${this.guild.id}-${this.id}`;
 				this.data = {};
 				this.data.fetch = this.fetch.bind(this);
 				this.data.set = this.set.bind(this);
@@ -14,34 +13,30 @@ module.exports = Structures => {
 
 			fetch(name) {
 				if (!name) throw new Error('No DB name Provided');
-				return this.client.db.fetch(`${name}_${this.uniquie}`);
+				return this.client.db.fetch(`${name}_${this.id}`);
 			}
 
 			set(name, data) {
 				if (!name) throw new Error('No DB name Provided');
 				if (!data) throw new Error('No data Provided');
-				return this.client.db.set(`${name}_${this.uniquie}`, data);
+				return this.client.db.set(`${name}_${this.id}`, data);
 			}
 
 			add(name, number) {
 				if (!name) throw new Error('No DB name Provided');
 				if (!number) throw new Error('No number Provided');
-				return this.client.db.add(`${name}_${this.uniquie}`, parseInt(number));
+				return this.client.db.add(`${name}_${this.id}`, parseInt(number));
 			}
 
 			subtract(name, number) {
 				if (!name) throw new Error('No DB name Provided');
 				if (!number) throw new Error('No number Provided');
-				return this.client.subtract(`${name}_${this.uniquie}`, parseInt(number));
+				return this.client.subtract(`${name}_${this.id}`, parseInt(number));
 			}
 
 			delete(name) {
 				if (!name) throw new Error('No DB name Provided');
-				return this.client.db.delete(`${name}_${this.uniquie}`);
-			}
-
-			allRoles() {
-				return this.roles.map(role => role.name);
+				return this.client.db.delete(`${name}_${this.id}`);
 			}
 		});
 };
