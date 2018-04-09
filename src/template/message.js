@@ -7,13 +7,13 @@ exports.run = (client, message) => {
 	const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
 
-	if (checkPerms(message, cmd)) {
-		// message.quickEmbed(`**This command is currently on cooldown for you, try again in \`${(Math.abs((Date.now() - limit) - getCooldown) / 1000).toFixed(2)}\` seconds.**`);
-		cmd.run(client, message, args);
-	} else {
-		message.quickEmbed(`Sorry dont have the Permission \`${cmd.conf.neededPerms}\` to run this Command.`);
+	if (checkCoolDown(message, cmd) === false) {
+		message.quickEmbed(`**This command is currently on cooldown for you**`);
 		return undefined;
 	}
+	if (checkPerms(message, cmd) === false) return message.quickEmbed(`Sorry dont have the Permission \`${cmd.conf.neededPerms}\` to run this Command.`);
+	cmd.run(client, message, args);
+	return undefined;
 };
 
 function checkPerms(message, cmd) {
@@ -21,23 +21,19 @@ function checkPerms(message, cmd) {
 	if (!message.member.hasPermission(cmd.conf.neededPerms)) return false;
 	return true;
 }
-/*
-function checkCooldown(client, message, args, cmd) {
+
+function checkCoolDown(message, cmd) {
+	if (!cmd.conf.cooldown) return true;
 	let limit = cmd.conf.cooldown * 500;
 	let getCooldown = cmd.conf.cooldownQueue.get(message.author.id);
-	if (cmd.conf.cooldown && cmd.conf.cooldown !== 0 && cmd.conf.neededPerms && !cmd.conf.neededPerms !== '') {
+	if (cmd.conf.cooldown && cmd.conf.cooldown !== 0) {
 		if (getCooldown !== null) {
-			if (getCooldown >= Date.now() - limit) {
-				return false; // eslint-disable-line
-			} else {
-				cmd.conf.cooldownQueue.set(message.author.id, Date.now() + limit);
-			}
+			if (getCooldown >= Date.now() - limit) return false;
+			cmd.conf.cooldownQueue.set(message.author.id, Date.now() + limit);
 		} else {
-			if (!message.member.hasPermission(cmd.conf.needPerms)) return undefined;
 			cmd.conf.cooldownQueue.set(message.author.id, Date.now() + limit);
 			return true;
 		}
 	}
 	return undefined;
-
 }
