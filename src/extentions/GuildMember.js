@@ -5,11 +5,11 @@ module.exports = Structures => {
 				super(...args);
 				this.uniquie = `${this.guild.id}-${this.id}`;
 				this.data = {};
-				this.data.fetch = this.fetch.bind(this);
-				this.data.set = this.set.bind(this);
-				this.data.add = this.add.bind(this);
-				this.data.subtract = this.subtract.bind(this);
-				this.data.delete = this.delete.bind(this);
+				this.data.fetch = this.fetch.bind(this); // Binds to member.data.fetch();
+				this.data.set = this.set.bind(this); // Binds to member.data.set();
+				this.data.add = this.add.bind(this); // Binds to member.data.add();
+				this.data.subtract = this.subtract.bind(this); // Binds to member.data.subtract();
+				this.data.delete = this.delete.bind(this); // Binds to member.data.delete();
 			}
 
 			fetch(name) {
