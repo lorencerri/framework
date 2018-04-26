@@ -89,7 +89,11 @@ class PlexiFramework extends Discord.Client {
 		let defaultConfig = {
 			token: 'Token Here',
 			prefix: 'Your prefix',
-			ownerID: 'Your Client ID'
+			ownerID: 'Your Client ID',
+			responses: {
+			    invalidUserPerms: 'Sorry %username%, you don\'t have the permission(s) to run this command: %perms%',
+			    invalidBotPerms: 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%'
+			}
 		};
 		if (!fs.existsSync(`${clientPath}/config.json`)) {
 			fs.writeFileSync(`${clientPath}/config.json`, JSON.stringify(defaultConfig, null, 4));
