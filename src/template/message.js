@@ -5,7 +5,7 @@ exports.run = (client, message) => {
 	let args = message.content.split(/ +/g).slice(1);
 	let command = message.content.split(' ')[0].slice(client.config.prefix.length).toLowerCase();
 	const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
-    if (!cmd) return undefined;
+    	if (!cmd) return undefined;
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
     
 	if (checkCoolDown(message, cmd) === false) {
@@ -29,7 +29,8 @@ exports.run = (client, message) => {
 function parseResponses(message, resp, permissions) {
     resp = resp.replace(/%username%/g, message.author.username);
     resp = resp.replace(/%user%/g, message.author);
-    if (permissions) resp = resp.replace(/%perms%/g, permissions);
+    if (permissions && permissions instanceof Array) resp = resp.replace(/%perms%/g, permissions.join(', '));
+    else if (permissions) resp = resp.replace(/%perms%/g, permissions);
     return resp;
 }
 
