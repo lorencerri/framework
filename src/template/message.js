@@ -12,7 +12,7 @@ exports.run = (client, message) => {
 		return undefined;
 	}
 	if (!this.config.responses) this.config.responses = {};
-	let responses: {
+	let responses = {
 	    invalidUserPerms: this.config.responses.invalidUserPerms || 'Sorry %username%, you don\'t have the permission(s) to run this command: %perms%',
 	    invalidBotPerms: this.config.responses.invalidBotPerms || 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%'
 	}
