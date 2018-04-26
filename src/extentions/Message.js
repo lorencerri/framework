@@ -14,7 +14,9 @@ module.exports = Structures => {
                             title: options.title,
                             description: text,
                             color: options.color,
-                            footer: options.footer
+                            footer: {
+                                text: options.footer
+                            }
                         }
                     })
                     .then(msg => {
