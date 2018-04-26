@@ -12,6 +12,7 @@ exports.run = (client, message) => {
 		return undefined;
 	}
 	if (checkPerms(message, cmd) === false) return message.quickEmbed(`Sorry dont have the Permission \`${cmd.conf.neededPerms}\` to run this Command.`);
+	if (checkBotPerms(message, cmd) === false) return message.quickEmbed(`Sorry, the bot doesn't have the Permission \`${cmd.conf.botPerms}\` to run this Command.`);
 	cmd.run(client, message, args);
 	return undefined;
 };
@@ -20,6 +21,12 @@ function checkPerms(message, cmd) {
 	if (!cmd.conf.neededPerms) return true;
 	if (!message.member.hasPermission(cmd.conf.neededPerms)) return false;
 	return true;
+}
+
+function checkBotPerms(message, cmd) {
+    if (!cmd.conf.botPerms) return true;
+    if (!message.guild.me.hasPermission(cmd.conf.botPerms)) return false;
+    return true;
 }
 
 function checkCoolDown(message, cmd) {
