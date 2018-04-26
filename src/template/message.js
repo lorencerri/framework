@@ -5,6 +5,7 @@ exports.run = (client, message) => {
 	let args = message.content.split(/ +/g).slice(1);
 	let command = message.content.split(' ')[0].slice(client.config.prefix.length).toLowerCase();
 	const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
+    	if (!cmd) return undefined;
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
     
 	if (checkCoolDown(message, cmd) === false) {
