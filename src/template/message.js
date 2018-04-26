@@ -5,7 +5,7 @@ exports.run = (client, message) => {
 	let args = message.content.split(/ +/g).slice(1);
 	let command = message.content.split(' ')[0].slice(client.config.prefix.length).toLowerCase();
 	const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
-    	if (!cmd) return undefined;
+    if (!cmd) return undefined;
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
     
 	if (checkCoolDown(message, cmd) === false) {
@@ -15,10 +15,12 @@ exports.run = (client, message) => {
 	if (!client.config.responses) client.config.responses = {};
 	let responses = {
 	    invalidUserPerms: client.config.responses.invalidUserPerms || 'Sorry %username%, you don\'t have the permission(s) to run this command: %perms%',
-	    invalidBotPerms: client.config.responses.invalidBotPerms || 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%'
+	    invalidBotPerms: client.config.responses.invalidBotPerms || 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%',
+	    invalidRoles: client.config.responses.invalidRoles || 'Sorry, you don\'t have the required role(s) to run this command: %perms%'
 	}
 	if (checkPerms(message, cmd) === false) return message.quickEmbed(parseResponses(message, responses.invalidUserPerms, cmd.conf.neededPerms));
 	if (checkBotPerms(message, cmd) === false) return message.quickEmbed(parseResponses(message, responses.invalidBotPerms, cmd.conf.botPerms));
+	if (checkRoles(message, cmd) === false) return message.quickEmbed(parseResponses(message, response.invalidRoles, cmd.conf.neededRoles));
 	cmd.run(client, message, args);
 	return undefined;
 };
@@ -35,6 +37,16 @@ function checkPerms(message, cmd) {
 	if (!cmd.conf.neededPerms) return true;
 	if (!message.member.hasPermission(cmd.conf.neededPerms)) return false;
 	return true;
+}
+
+function checkRoles(message, cmd) {
+    if (!cmd.conf.neededRoles) return true;
+    if (typeof cmd.conf.neededRoles === 'string') return message.member.roles.has(cmd.conf.neededRoles);
+    let hasRoles = true;
+    cmd.conf.neededRoles.map(function(role) {
+        if (hasRoles && !message.member.roles.has(role)) hasRoles = false;
+    })
+    return hasRoles;
 }
 
 function checkBotPerms(message, cmd) {
