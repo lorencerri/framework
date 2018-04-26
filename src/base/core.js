@@ -17,6 +17,7 @@ class PlexiFramework extends Discord.Client {
         this.loadEvents();
         this.loadConfiguration();
         this.config = require(`${clientPath}/config.json`);
+        this.MessageEmbed = Discord.MessageEmbed();
         require('../functions/function.js')(this);
     }
 
