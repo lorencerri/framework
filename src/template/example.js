@@ -12,7 +12,8 @@ exports.conf = {
 	guildOnly: false, // Set this option to either 'true/false', if you want this command enabled or disabled in DM's
 	aliases: ['alias'], // Aliases, allows you to execute your command with other name, ie: ban, banish executes the same command
 	cooldown: 10, // Command cooldown, set to 0 if you want to disable
-	neededPerms: '' // required Permissions to run this Command. for example / BAN_MEMBERS
+	neededPerms: '', // Required permissions to run this Command. for example / BAN_MEMBERS
+	botPerms: '' // Required permissions for the bot to run this Command. For example / BAN_MEMBERS
 };
 exports.help = {
 	name: 'test',   // Your command name, important to have it be the same as the file name, just without the '.js'
