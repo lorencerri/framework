@@ -100,7 +100,8 @@ class PlexiFramework extends Discord.Client {
             ownerID: 'Your Client ID',
             responses: {
                 invalidUserPerms: 'Sorry %username%, you don\'t have the permission(s) to run this command: %perms%',
-                invalidBotPerms: 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%'
+                invalidBotPerms: 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%',
+                invalidRoles: 'Sorry, you don\'t have the required role(s) to run this command: %perms%'
             }
         };
         if (!fs.existsSync(`${clientPath}/config.json`)) {
