@@ -1,28 +1,42 @@
 module.exports.run = (client, message, args) => {
+    
+    // Return if author is not defined in the config file
 	if (message.author.id !== client.config.ownerID) return;
+	
+	// Attempt to evaluate code
 	try {
-		const code = args.join(' ');
-		let evaled = eval(code);
+	    
+		let evaled = eval(args.join(' '));
 
 		if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
-		message.channel.send(clean(evaled), { code: 'xl' });
+		resp(client, message, args, evaled, false);
+		
 	} catch (err) {
-		message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+		resp(client, message, args, err, true);
 	}
+	
 };
 
-const clean = text => {
-	if (typeof text === 'string') {
-		return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)); // eslint-disable-line
-	} else {
-		return text;
-	}
-};
-exports.conf = {
-	guildOnly: false,
-	aliases: ['e'],
-	cooldown: 0
-};
+// Response
+const resp = (client, message, args, res, err) => {
+    
+    args = `\`\`\`js\n${args.join(' ')}\`\`\``;
+    if (res.length > 1024) res = '** - Input Too Long - **'
+    
+    res = `\`\`\`js\n${res}\`\`\``;
+    if (res.length > 1024) res = '** - Response Too Long - **'
+    
+    const embed = new client.MessageEmbed()
+        .setColor(0x58D68D)
+        .setTitle('Evalulation')
+        .addField('Input', args)
+        .addField('Output', res);
+    
+    if (err) embed.setTitle('\`ERROR\`').setColor(0xEC7063);
+    message.channel.send(embed);
+    
+}
+
 exports.help = {
 	name: 'eval',
 	description: 'Evaluates arbitrary Javascript',
