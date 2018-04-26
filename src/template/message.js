@@ -11,10 +11,10 @@ exports.run = (client, message) => {
 		message.quickEmbed(`**This command is currently on cooldown for you**`);
 		return undefined;
 	}
-	if (!this.config.responses) this.config.responses = {};
+	if (!client.config.responses) client.config.responses = {};
 	let responses = {
-	    invalidUserPerms: this.config.responses.invalidUserPerms || 'Sorry %username%, you don\'t have the permission(s) to run this command: %perms%',
-	    invalidBotPerms: this.config.responses.invalidBotPerms || 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%'
+	    invalidUserPerms: client.config.responses.invalidUserPerms || 'Sorry %username%, you don\'t have the permission(s) to run this command: %perms%',
+	    invalidBotPerms: client.config.responses.invalidBotPerms || 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%'
 	}
 	if (checkPerms(message, cmd) === false) return message.quickEmbed(parseResponses(message, responses.invalidUserPerms, cmd.conf.neededPerms));
 	if (checkBotPerms(message, cmd) === false) return message.quickEmbed(parseResponses(message, responses.invalidBotPerms, cmd.conf.botPerms));
