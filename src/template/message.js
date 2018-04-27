@@ -5,7 +5,7 @@ exports.run = (client, message) => {
 	let args = message.content.split(/ +/g).slice(1);
 	let command = message.content.split(' ')[0].slice(client.config.prefix.length).toLowerCase();
 	const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
-    	if (!cmd) return undefined;
+    if (!cmd) return undefined;
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
 	if (checkCoolDown(message, cmd) === false) {
 		message.quickEmbed(null, { footer: `**This command is currently on cooldown for you, sorry!**` });
@@ -21,6 +21,7 @@ exports.run = (client, message) => {
 	if (checkBotPerms(message, cmd) === false) return message.quickEmbed(null, { footer: parseResponses(message, responses.invalidBotPerms, cmd.conf.botPerms) });
 	if (!checkRoles(message, cmd)) return message.quickEmbed(null, { footer: parseResponses(message, responses.invalidRoles, cmd.conf.neededRoles) });
 	cmd.run(client, message, args);
+	if (message.guild) console.log(`${client.chalk.blue(message.guild.name)} ${client.chalk.blue.bold('»')} ${client.chalk.blue(message.channel.name)} ${client.chalk.blue.bold('»')} Ran the command: ${client.chalk.hex('#419df4')(command)}`); // eslint-disable-line no-console
 	return undefined;
 };
 
