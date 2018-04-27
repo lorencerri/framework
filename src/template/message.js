@@ -7,9 +7,8 @@ exports.run = (client, message) => {
 	const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
     if (!cmd) return undefined;
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
-    
 	if (checkCoolDown(message, cmd) === false) {
-		message.quickEmbed(`**This command is currently on cooldown for you**`);
+		message.quickEmbed(null, { footer: `**This command is currently on cooldown for you, sorry!**` });
 		return undefined;
 	}
 	if (!client.config.responses) client.config.responses = {};
@@ -20,7 +19,7 @@ exports.run = (client, message) => {
 	}
 	if (checkPerms(message, cmd) === false) return message.quickEmbed(null, { footer: parseResponses(message, responses.invalidUserPerms, cmd.conf.neededPerms) });
 	if (checkBotPerms(message, cmd) === false) return message.quickEmbed(null, { footer: parseResponses(message, responses.invalidBotPerms, cmd.conf.botPerms) });
-	if (checkRoles(message, cmd) === false) return message.quickEmbed(null, { footer: parseResponses(message, response.invalidRoles, cmd.conf.neededRoles) });
+	if (!checkRoles(message, cmd)) return message.quickEmbed(null, { footer: parseResponses(message, responses.invalidRoles, cmd.conf.neededRoles) });
 	cmd.run(client, message, args);
 	return undefined;
 };
@@ -42,10 +41,10 @@ function checkPerms(message, cmd) {
 
 function checkRoles(message, cmd) {
     if (!cmd.conf.neededRoles) return true;
-    if (typeof cmd.conf.neededRoles === 'string') return message.member.roles.has(cmd.conf.neededRoles);
+    if (typeof cmd.conf.neededRoles === 'string') return message.member.roles.find('name', cmd.conf.neededRoles);
     let hasRoles = true;
     cmd.conf.neededRoles.map(function(role) {
-        if (hasRoles && !message.member.roles.has(role)) hasRoles = false;
+        if (hasRoles && !message.member.roles.find('name', role)) hasRoles = false;
     })
     return hasRoles;
 }
