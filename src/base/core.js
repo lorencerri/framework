@@ -13,6 +13,7 @@ class PlexiFramework extends Discord.Client {
         this.log = require('../functions/Log');
         this.commands = new Discord.Collection();
         this.aliases = new Discord.Collection();
+        this.MessageEmbed = Discord.MessageEmbed;
         this.loadCommands();
         this.loadEvents();
         this.loadConfiguration();
@@ -42,7 +43,8 @@ class PlexiFramework extends Discord.Client {
                     aliases: props.conf.aliases || [],
                     cooldown: props.conf.cooldown || 0,
                     neededPerms: props.conf.neededPerms || null,
-                    botPerms: props.conf.botPerms || null
+                    botPerms: props.conf.botPerms || null,
+                    neededRoles: props.conf.neededRoles || null
                 }
                 props.conf.cooldownQueue = new Map();
                 this.commands.set(props.help.name, props);
@@ -101,8 +103,7 @@ class PlexiFramework extends Discord.Client {
             ownerID: 'Your Client ID',
             responses: {
                 invalidUserPerms: 'Sorry %username%, you don\'t have the permission(s) to run this command: %perms%',
-                invalidBotPerms: 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%',
-                invalidRoles: 'Sorry, you don\'t have the required role(s) to run this command: %perms%'
+                invalidBotPerms: 'Sorry, the bot doesn\'t have the permission(s) to run this command: %perms%'
             }
         };
         if (!fs.existsSync(`${clientPath}/config.json`)) {
