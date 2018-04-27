@@ -9,6 +9,7 @@ require('../extentions/User.js')(Discord.Structures);
 class PlexiFramework extends Discord.Client {
     constructor(options) {
         super(options);
+        this.chalk = require('chalk');
         this.db = require('quick.db');
         this.log = require('../functions/Log');
         this.commands = new Discord.Collection();
