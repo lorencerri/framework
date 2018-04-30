@@ -1,0 +1,44 @@
+.jumbotron {
+  padding-top: 1rem !important; 
+}
+
+.table > tbody > tr {
+   cursor: pointer;
+}
+
+.navbar {
+  background-color: #7289DA;
+}
+
+.navbar > .navbar-brand {
+  color: #FFFFFF; 
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #FFFFFF; 
+}
+
+.hljs {
+  background-color: #D3D3D3; 
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 166px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #7289DA;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+    box-shadow: 1px 1px 10px grey;
+}
+
+/* Style page content */
+.main {
+    margin-left: 166px; /* Same as the width of the sidebar */
+    padding: 10px 10px;
+}
