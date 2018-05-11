@@ -114,7 +114,7 @@ class PlexiFramework extends Discord.Client {
             this.log.ready('Please insert your Client ID, Token and Prefix.');
             this.log.ready('Once completed restart the Bot.');
             this.log.ready('Thank you for using the Plexi Development Framework.');
-            this.log.ready('Offical Server : https://discord.io/plexidev');
+            this.log.ready('Offical Server : https://discord.gg/plexidev');
             this.log.ready('====================================================');
             this.loadExamples();
             process.exit(1);
