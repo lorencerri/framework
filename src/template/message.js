@@ -8,7 +8,7 @@ exports.run = (client, message) => {
     if (!cmd) return undefined;
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
 	if (checkCoolDown(message, cmd) === false) {
-		message.quickEmbed(null, { footer: `**This command is currently on cooldown for you, sorry!**` });
+		message.quickEmbed(null, { footer: `This command is currently on cooldown for you, sorry!` });
 		return undefined;
 	}
 	if (!client.config.responses) client.config.responses = {};
