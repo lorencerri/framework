@@ -7,7 +7,7 @@ exports.run = (client, message) => {
 	const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
     if (!cmd) return undefined;
 	if (!message.guild && cmd.conf.guildOnly) return undefined;
-	if (checkCoolDown(message, cmd) === false) {
+	if (checkCoolDown(client, message, cmd) === false) {
 		message.quickEmbed(null, { footer: `This command is currently on cooldown for you, sorry!` });
 		return undefined;
 	}
@@ -56,7 +56,8 @@ function checkBotPerms(message, cmd) {
     return true;
 }
 
-function checkCoolDown(message, cmd) {
+function checkCoolDown(client, message, cmd) {
+	if (message.author.id === client.config.ownerID) return true;
 	if (!cmd.conf.cooldown) return true;
 	let limit = cmd.conf.cooldown * 500;
 	let getCooldown = cmd.conf.cooldownQueue.get(message.author.id);
